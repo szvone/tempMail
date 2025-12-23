@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>临时邮箱</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="container">
+        
+        <main>
+            <section class="email-generator">
+                <div class="section-header">
+                    <h2>临时邮箱</h2>
+                </div>
+                
+                <div class="generation-mode">
+                    <div class="mode-selector">
+                        <button id="randomModeBtn" class="mode-btn active" data-mode="random">
+                            <span class="mode-icon">🎲</span>
+                            <span class="mode-text">随机生成</span>
+                        </button>
+                        <button id="customModeBtn" class="mode-btn" data-mode="custom">
+                            <span class="mode-icon">✏️</span>
+                            <span class="mode-text">自定义</span>
+                        </button>
+                    </div>
+                    
+                    <div class="mode-content">
+                        <!-- 随机生成模式 -->
+                        <div id="randomMode" class="mode-panel active">
+                            <button id="generateBtn" class="btn btn-primary btn-large">🎲 生成随机邮箱</button>
+                        </div>
+                        
+                        <!-- 自定义模式 -->
+                        <div id="customMode" class="mode-panel">
+                            <div class="custom-input-group">
+                                <input type="text" id="customUsername" placeholder="输入用户名（字母、数字、下划线）" maxlength="20">
+                                <select id="domainSelect" class="domain-select">
+                                    <option value="">选择域名</option>
+                                </select>
+                                 <button id="useCustomBtn" class="btn btn-secondary">确认使用</button>
+                            </div>
+                           
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="email-display">
+                    <!-- <label for="emailAddress">当前邮箱地址：</label> -->
+                    <br>
+                    <div class="current-email-group">
+                        <input type="text" id="emailAddress" readonly placeholder="请选择生成方式">
+                        <button id="copyBtn" class="btn btn-copy">📋 复制</button>
+                    </div>
+                </div>
+            </section>
+            
+            <section class="email-list">
+                <div class="email-list-header">
+                    <h2>📧 收件箱</h2>
+                    <div class="email-list-controls">
+                        <span id="emailCount" class="email-count">0 封邮件</span>
+                        <div class="refresh-control">
+                            <span id="refreshCountdown" class="refresh-countdown clickable" style="width: 110px;">5秒后刷新</span>
+                        </div>
+                    </div>
+                </div>
+                <div id="emailContent" class="email-content">
+                    <div class="empty-state">
+                        <div class="empty-icon">📭</div>
+                        <p>暂无邮件</p>
+                        <p>使用上方生成的邮箱地址接收邮件</p>
+                    </div>
+                </div>
+            </section>
+        </main>
+        
+    </div>
+    
+    <script src="/static/script.js"></script>
+</body>
+</html>
