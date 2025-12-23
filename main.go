@@ -1,7 +1,10 @@
 package main
 
 import (
+	"embed"
+	"io/fs"
 	"log"
+	"net/http"
 	"os"
 	"strings"
 	"time"
@@ -10,6 +13,9 @@ import (
 	"github.com/gin-gonic/gin"
 	_ "github.com/joho/godotenv/autoload"
 )
+
+//go:embed static/*
+var staticFS embed.FS
 
 // Config 应用配置
 type Config struct {
@@ -73,6 +79,7 @@ func handler(c *smtpsrv.Context) error {
 		log.Printf("解析邮件失败: %v", err)
 		return err
 	}
+	log.Printf("收到来自 %s 发送给 %s 的邮件", from, to)
 
 	content := MailContent{
 		From:        from,
@@ -92,7 +99,7 @@ func handler(c *smtpsrv.Context) error {
 		}
 	}
 
-	log.Printf("收到来自 %s 发送给 %s 的邮件", from, to)
+	log.Printf("来自 %s 发送给 %s 的邮件 邮件处理完毕！", from, to)
 	return nil
 }
 
@@ -143,12 +150,23 @@ func startHTTPServer() {
 }
 
 func setupRoutes(r *gin.Engine) {
-	// 静态文件服务 - 使用特定路径避免冲突
-	r.Static("/static", "./static")
+	// 使用嵌入的静态文件系统
+	staticSubFS, err := fs.Sub(staticFS, "static")
+	if err != nil {
+		log.Fatalf("无法加载静态文件: %v", err)
+	}
+
+	// 静态文件服务 - 使用嵌入的文件系统
+	r.StaticFS("/static", http.FS(staticSubFS))
 
 	// 主页服务
 	r.GET("/", func(c *gin.Context) {
-		c.File("./static/index.html")
+		data, err := staticFS.ReadFile("static/index.html")
+		if err != nil {
+			c.String(500, "无法加载主页")
+			return
+		}
+		c.Data(200, "text/html; charset=utf-8", data)
 	})
 
 	r.GET("/getAllowedDomains", func(c *gin.Context) {

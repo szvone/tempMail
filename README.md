@@ -40,6 +40,61 @@ cd tempMail-main
 go run .
 ```
 
+### 编译教程
+
+#### 1. 下载依赖
+```bash
+go mod download
+```
+
+#### 2. 编译项目
+```bash
+# 编译为可执行文件
+go build -o tempMail.exe .
+
+# 或者编译为特定平台的可执行文件
+# Windows
+go build -o tempMail.exe .
+
+# Linux
+go build -o tempMail .
+
+# macOS
+go build -o tempMail .
+```
+
+#### 3. 交叉编译（可选）
+```bash
+# 编译为Windows可执行文件（在Linux/macOS上）
+GOOS=windows GOARCH=amd64 go build -o tempMail.exe .
+
+# 编译为Linux可执行文件（在Windows上）
+GOOS=linux GOARCH=amd64 go build -o tempMail .
+
+# 编译为macOS可执行文件（在Windows上）
+GOOS=darwin GOARCH=amd64 go build -o tempMail .
+```
+
+#### 4. 运行编译后的程序
+```bash
+# Windows
+./tempMail.exe
+
+# Linux/macOS
+./tempMail
+```
+
+#### 5. 编译参数说明
+
+- `-o`：指定输出文件名
+- `-ldflags`：链接时参数（可选）
+- `-v`：显示编译详细信息（可选）
+
+示例：编译时添加版本信息
+```bash
+go build -ldflags "-X main.version=1.0.0 -X main.buildTime=$(date +'%Y-%m-%d %H:%M:%S')" -o tempMail.exe .
+```
+
 ## 配置说明
 
 ### 环境变量配置 (.env)
